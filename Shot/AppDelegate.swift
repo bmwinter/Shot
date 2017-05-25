@@ -7,40 +7,74 @@
 //
 
 import UIKit
+import Material
+import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
+    let baseURL = "https://www.techfiapps.com/api"
 
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
+    {
+        window = UIWindow(frame: Screen.bounds)
+        
+        //enable push notifications on iOS 9 & 10
+        if #available(iOS 10, *) {
+            UNUserNotificationCenter.current().requestAuthorization(options:[.badge, .alert, .sound]){ (granted, error) in }
+            application.registerForRemoteNotifications()
+        }
+        else { // only iOS 9 since thats the deployment target
+            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil))
+            UIApplication.shared.registerForRemoteNotifications()
+        }
+        
+        // set token for registration
+        let prefs = UserDefaults.standard
+        prefs.setValue("", forKey: "token")
+        
+        // open signup, login or posts page
+        if let loggedIn = prefs.string(forKey: "loggedIn"){ // not signed up
+            if (loggedIn == "true") {
+                // open image stack
+                window!.rootViewController = ShotPageTabBarController(viewControllers: [PostsViewController(), GroupsTableViewController(), FriendsTableViewController()], selectedIndex: 0)
+            }
+        } else{ // first time
+            prefs.setValue("false", forKey: "loggedIn")
+            window!.rootViewController = SignupViewController()
+        }
+        window!.makeKeyAndVisible()
+        
         return true
     }
 
-    func applicationWillResignActive(_ application: UIApplication) {
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+    class func getAppDelegate() -> AppDelegate {
+        return UIApplication.shared.delegate as! AppDelegate
     }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
 
-    func applicationDidEnterBackground(_ application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        let deviceTokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
+        let prefs = UserDefaults.standard
+        prefs.setValue(deviceTokenString, forKey: "token")
     }
-
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+    
+    private func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+        print(userInfo)
+        
+        let alertController = UIAlertController(title: "Message", message:
+            "You have received a new image!", preferredStyle: UIAlertControllerStyle.alert)
+        let cancelAction = UIAlertAction(title: "Okay", style: .cancel)
+        alertController.addAction(cancelAction)
+        
+        self.window!.rootViewController?.present(alertController, animated: true, completion: nil)
+        
+        let localNotification:UILocalNotification = UILocalNotification()
+        localNotification.alertAction = "Shot"
+        localNotification.alertBody = "You have received a new image!"
+        localNotification.fireDate = NSDate(timeIntervalSinceNow: 0) as Date
+        UIApplication.shared.scheduleLocalNotification(localNotification)
     }
-
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    }
-
-    func applicationWillTerminate(_ application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-    }
-
-
 }
 
