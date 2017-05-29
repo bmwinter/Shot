@@ -24,8 +24,8 @@ class FriendsTableViewController: UITableViewController {
     var groups: [String] = []
     var friends: [[[String]]] = [[[]]]
     
-    
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
         self.tableView.delegate = self
@@ -34,10 +34,8 @@ class FriendsTableViewController: UITableViewController {
         let beatAnimator = BeatAnimator(frame: CGRect(x: 0, y: 0, width: 320, height: 80))
         tableView.addPullToRefreshWithAction({
             OperationQueue().addOperation {
-                
                 self.askForContactAccess()
                 self.getContacts()
-                
             }
         }, withAnimator: beatAnimator)
         
@@ -48,25 +46,20 @@ class FriendsTableViewController: UITableViewController {
             
             // display synced contacts
             var filePath : String {
-                    let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
-                    return url!.appendingPathComponent("friends").path
-                }
-                if let array = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) {
-                    let contactsList = array as! [[[String]]]
-                    self.friends = contactsList
-                    self.tableView.reloadData()
-                }
-            
-            
-        } else{ // first time
-            
+                let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+                return url!.appendingPathComponent("friends").path
+            }
+            if let array = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) {
+                let contactsList = array as! [[[String]]]
+                self.friends = contactsList
+                self.tableView.reloadData()
+            }
+        } else { // first time
             self.askForContactAccess()
             self.getContacts()
             prefs.setValue(true, forKey: "contactsSynced")
         }
-        
     }
-    
     
     func askForContactAccess() {
         let authorizationStatus = CNContactStore.authorizationStatus(for: CNEntityType.contacts)
@@ -105,7 +98,6 @@ class FriendsTableViewController: UITableViewController {
                 contacts.append(contentsOf: containerResults)
             } catch { }
         }
-
         
         for contact in self.contacts {
             
@@ -137,8 +129,8 @@ class FriendsTableViewController: UITableViewController {
             }
         }
         
-        // input: names, phone_numbers
-        // output: valid names, phone_numbers
+        // input: [names], [phone_numbers]
+        // output: "valid" [names], [phone_numbers]
         let parameters: [String: [String]] = [
             "names": self.names,
             "phone_numbers": self.phoneNumbers
@@ -162,52 +154,38 @@ class FriendsTableViewController: UITableViewController {
                     let url = manager.urls(for: .documentDirectory, in: .userDomainMask).first
                     return url!.appendingPathComponent("friendGroups").path
                 }
-                if let friendGroupsPath = NSKeyedUnarchiver.unarchiveObject(withFile: filePathGroups) {
-                    
-                } else { // testFriendGroups does not exist
-                    
+                // populate friends for first time
+                if (NSKeyedUnarchiver.unarchiveObject(withFile: filePathGroups) == nil) {
                     let groupListDefault = ["Friends"]
                     self.saveGroupsList(groups: groupListDefault, filePath: filePathGroups)
                 }
-                
-                // add user to NSKey
+                // add user to NSKeyedArchive
                 for user in validUsers {
                     print(user.key)
                     print(user.value)
                     self.updateContacts(phoneNumber: user.value as! String, name: user.key)
                 }
-           }
-            
-            // cannot connect to API
+            }
+                
+            // unable to connect to API
             else {
                 var filePath : String {
                     let manager = FileManager.default
                     let url = manager.urls(for: .documentDirectory, in: .userDomainMask).first
                     return url!.appendingPathComponent("friends").path
                 }
-                
                 if let array = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) {
-                    
                     let contactsList = array as! [[[String]]]
                     self.friends = contactsList
-                    
                     self.tableView.reloadData()
-                    
                     OperationQueue.main.addOperation {
                         self.tableView.stopPullToRefresh()
                     }
-                }
-                    
-                    // No stored contacts
-                else {
+                } else { // no stored contacts
                     self.alertError(error: "An error has occurred. Please restart the app.")
                 }
-
             }
         }
-        
-        
-        
         OperationQueue.main.addOperation {
             self.tableView.stopPullToRefresh()
         }
@@ -224,28 +202,17 @@ class FriendsTableViewController: UITableViewController {
         return nil
     }
 
-    
-   
-
     func updateContacts(phoneNumber: String, name: String) {
         
         self.names.append(name)
         self.phoneNumbers.append(phoneNumber)
         self.activeContacts.append("false")
-        
-        print("names \(self.names)")
-        print("phone numbers: \(self.phoneNumbers)")
-        
-        
         var friendsSection = [[[String]]]()
         var friendSection = [[String]]()
-        
         friendSection.append(self.names)
         friendSection.append(self.phoneNumbers)
         friendSection.append(self.activeContacts)
-        
         friendsSection.append(friendSection)
-        
         self.friends = friendsSection
         
         var filePath : String {
@@ -254,7 +221,6 @@ class FriendsTableViewController: UITableViewController {
             return url!.appendingPathComponent("friends").path
         }
         self.saveFriendsList(friends: friendsSection, filePath: filePath)
-        
         tableView.reloadData()
     }
     
@@ -266,7 +232,6 @@ class FriendsTableViewController: UITableViewController {
         NSKeyedArchiver.archiveRootObject(friends, toFile: filePath)
     }
     
-    
     func alertError(error: String) {
         let alertController = UIAlertController(title: "Error", message:
             error, preferredStyle: UIAlertControllerStyle.alert)
@@ -274,8 +239,6 @@ class FriendsTableViewController: UITableViewController {
         
         self.present(alertController, animated: true, completion: nil)
     }
-    
- 
     
     func getAppDelegate() -> AppDelegate {
         return UIApplication.shared.delegate as! AppDelegate
@@ -294,8 +257,6 @@ class FriendsTableViewController: UITableViewController {
         pageTabBarItem.title = "FRIENDS"
         pageTabBarItem.tintColor = .white
     }
-
-
 }
 
 //
@@ -354,8 +315,6 @@ extension FriendsTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
-    
-    
 }
 
 //
@@ -364,25 +323,11 @@ extension FriendsTableViewController {
 extension FriendsTableViewController: CollapsibleTableViewHeaderDelegate {
     
     func toggleSection(_ header: CollapsibleTableViewHeader, section: Int) {
-        //let collapsed = !sections[section].collapsed
         let collapsed = true
-        
-        // Toggle collapse
-        //sections[section].collapsed = collapsed
         header.setCollapsed(collapsed)
         
         // Adjust the height of the rows inside the section
         tableView.beginUpdates()
-//        for i in 0 ..< sections[section].names.count {
-//            tableView.reloadRows(at: [IndexPath(row: i, section: section)], with: .automatic)
-//        }
         tableView.endUpdates()
-        
     }
-    
 }
-
-
-
-
-

@@ -13,18 +13,13 @@ import SwiftSpinner
 
 class SignupViewController: UIViewController, UITextFieldDelegate {
     
-    // set default colors
     let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21))
     let darkBlackColor = UIColor(red: 38/255, green: 35/255, blue: 36/255, alpha: 1)
     let darkGrayColor = UIColor(red: 170/255, green: 170/255, blue: 170/255, alpha: 1)
     let lightGrayColor = UIColor(red: 243/255, green: 243/255, blue: 243/255, alpha: 1)
-
-    // set text fields
     private var firstNameField: TextField!
     private var lastNameField: TextField!
     private var phoneNumberField: TextField!
-    
-    // set sms verification fields
     private var smsCodeField: TextField!
     private var smsCodeButton: UIButton!
     private var signupButton: UIButton!
@@ -44,10 +39,8 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
         view.backgroundColor = .white
         
-        // create sign-up label
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
         label.text = "SIGN-UP"
         label.textAlignment = NSTextAlignment.center
@@ -55,7 +48,6 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         label.backgroundColor = darkBlackColor
         self.view.addSubview(label)
         
-        // create text fields
         prepareFirstNameField()
         prepareLastNameField()
         preparePhoneNumberField()
@@ -82,7 +74,6 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     
     private func prepareFirstNameField() {
         
-        // create first name text field
         firstNameField = TextField(frame: CGRect(x: constant, y: 2 * constant, width: view.width - (2 * constant), height: constant))
         firstNameField.placeholder = "first name"
         firstNameField.placeholderNormalColor = darkBlackColor
@@ -101,7 +92,6 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     
     private func prepareLastNameField() {
         
-        // create last name text field
         lastNameField = TextField(frame: CGRect(x: constant, y: 3.5 * constant, width: view.width - (2 * constant), height: constant))
         lastNameField.placeholder = "last name"
         lastNameField.leftViewMode = UITextFieldViewMode.always
@@ -138,7 +128,6 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
-        
         // Try to find next responder
         if let nextField = textField.superview?.viewWithTag(textField.tag + 1) as? UITextField {
             nextField.becomeFirstResponder()
@@ -152,7 +141,6 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     
     private func prepareSMSCodeField() {
         
-        // create sms code text field
         smsCodeField = TextField(frame: CGRect(x: constant, y: 4 * constant, width: view.width - (2 * constant), height: constant))
         smsCodeField.placeholder = "sms code"
         smsCodeField.keyboardType = UIKeyboardType.numberPad
@@ -249,7 +237,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
             prefs.setValue(phoneNumberText, forKey: "phone_number")
             
             // device token
-            let deviceToken = prefs.string(forKey: "token")
+            let deviceToken = prefs.string(forKey: "token")!
             let full_name = firstNameText + " " + lastNameText
             let parameters_register = [
                 "name": full_name,
@@ -257,7 +245,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
                 "token": requestId,
                 "device_token": deviceToken
             ]
-                            
+            
             // register user
             Alamofire.request(AppDelegate.getAppDelegate().baseURL + "/user/register", method: .post, parameters: parameters_register, encoding: JSONEncoding.default).responseJSON { response in
     
@@ -279,10 +267,10 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     }
     
     func alertError(error: String) {
+        
         let alertController = UIAlertController(title: "Error", message:
             error, preferredStyle: UIAlertControllerStyle.alert)
         alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
-        
         self.present(alertController, animated: true, completion: nil)
     }
     
@@ -292,7 +280,6 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         let alertController = UIAlertController(title: "Message", message: message, preferredStyle: UIAlertControllerStyle.alert)
         alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
         self.present(alertController, animated: true, completion: nil)
-        
     }
     
     func validate(value: String) -> (Bool) {
@@ -307,7 +294,6 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     }
 
     func preparePageTabBarItem() {
-        
         pageTabBarItem.title = "SIGN-UP"
     }
     
@@ -316,5 +302,4 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         view.endEditing(true)
         super.touchesBegan(touches, with: event)
     }
-        
 }

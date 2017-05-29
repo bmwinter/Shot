@@ -20,31 +20,19 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate, UI
     var imageView: UIImageView!
     var imageURLS = [String]()
     var currentImageIndex = 0
-    
-    var noPostsDisplaying = false
-    
-    var viewAppear = false
-
-    
     let tapRecognizer = UITapGestureRecognizer()
-    
-    
+    var noPostsDisplaying = false
+    var viewAppear = false
     var groups = [String]()
     var selectedGroup = ""
     var selectedGroupIndex = -1
     var drop: UIDropDown!
     var label: UILabel!
     var imageViewPost: UIImageView!
-    
     let darkBlackColor = UIColor(red: 38/255, green: 35/255, blue: 36/255, alpha: 1)
     let darkGrayColor = UIColor(red: 170/255, green: 170/255, blue: 170/255, alpha: 1)
     let lightGrayColor = UIColor(red: 243/255, green: 243/255, blue: 243/255, alpha: 1)
     private let constant: CGFloat = 50
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -56,7 +44,6 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate, UI
             viewAppear = true
         }
     }
-    
     
     func retrievePosts() {
         
@@ -96,6 +83,7 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 UIApplication.shared.applicationIconBadgeNumber = 0
                 
             } else {
+                self.noPostsDisplaying = false
                 self.displayNoPosts()
             }
         }
@@ -125,7 +113,6 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate, UI
         
         return false
     }
-
     
     func displayNoPosts() {
         
@@ -158,17 +145,17 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate, UI
             newPostButton.cornerRadius = 0
             newPostButton.borderColor = self.darkBlackColor
             newPostButton.borderWidth = 1
-            
+    
             self.scrollView = UIScrollView(frame: view.bounds)
             self.scrollView.contentSize = view.bounds.size
             self.scrollView.alwaysBounceVertical = true
-            
             self.scrollView.addSubview(self.label)
             self.scrollView.addSubview(newPostButton)
             self.view.addSubview(scrollView)
             
             self.noPostsDisplaying = true
             
+            // pull to refresh fetches new images
             let beatAnimator = BeatAnimator(frame: CGRect(x: 0, y: 0, width: 320, height: 80))
             scrollView.addPullToRefreshWithAction({
                 OperationQueue().addOperation {
@@ -240,11 +227,8 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate, UI
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
             self.clearPosts() // removes current posts and calls loadPosts()
         }
-        
         alertController.addAction(cancelAction)
-        
         self.present(alertController, animated: true, completion: nil)
-        
     }
     
     func displayCamera() {
@@ -273,7 +257,6 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate, UI
                     guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
                         return
                     }
-                    
                     if UIApplication.shared.canOpenURL(settingsUrl) {
                         UIApplication.shared.openURL(settingsUrl)
                     }
@@ -318,10 +301,8 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate, UI
                         self.present(alertController, animated: true, completion: nil)
                     }
                 }
-                
             }
         }
-        
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
@@ -344,7 +325,6 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate, UI
             // send to post members or cancel post
             preparePostButtons()
         }
-        
     }
     
     func preparePostButtons() {
@@ -467,7 +447,6 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate, UI
         }
     }
     
-    
     func prepareGroupDropdown() {
         
         // groups
@@ -522,8 +501,9 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate, UI
             "Post sent individually to everyone in selected group.", preferredStyle: UIAlertControllerStyle.alert)
         let cancelAction = UIAlertAction(title: "Dismiss", style: .cancel) {
             (action) in
-            self.checkNotificationSettings()
-            self.clearPosts()
+            if (self.checkNotificationSettings()) {
+                self.clearPosts()
+            }
         }
         alertController.addAction(cancelAction)
         self.present(alertController, animated: true, completion: nil)
@@ -567,4 +547,3 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate, UI
     }
     
 }
-

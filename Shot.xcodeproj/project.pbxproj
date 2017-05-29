@@ -20,7 +20,6 @@
 		80C857311ED135050011DA34 /* FriendsTableViewController_Backup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C857301ED135050011DA34 /* FriendsTableViewController_Backup.swift */; };
 		80C857331ED697C70011DA34 /* PostsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C857321ED697C70011DA34 /* PostsViewController.swift */; };
 		80DFEA211E202DE400F7B9F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DFEA201E202DE400F7B9F3 /* AppDelegate.swift */; };
-		80DFEA231E202DE400F7B9F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DFEA221E202DE400F7B9F3 /* ViewController.swift */; };
 		80DFEA261E202DE400F7B9F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80DFEA241E202DE400F7B9F3 /* Main.storyboard */; };
 		80DFEA281E202DE500F7B9F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80DFEA271E202DE500F7B9F3 /* Assets.xcassets */; };
 		80DFEA2B1E202DE500F7B9F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80DFEA291E202DE500F7B9F3 /* LaunchScreen.storyboard */; };
@@ -43,7 +42,6 @@
 		80C857321ED697C70011DA34 /* PostsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostsViewController.swift; sourceTree = "<group>"; };
 		80DFEA1D1E202DE400F7B9F3 /* Shot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80DFEA201E202DE400F7B9F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		80DFEA221E202DE400F7B9F3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		80DFEA251E202DE400F7B9F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		80DFEA271E202DE500F7B9F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		80DFEA2A1E202DE500F7B9F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -96,7 +94,6 @@
 			children = (
 				805B32221E202F0E0020C69E /* Shot.entitlements */,
 				80DFEA201E202DE400F7B9F3 /* AppDelegate.swift */,
-				80DFEA221E202DE400F7B9F3 /* ViewController.swift */,
 				805B32291E2030AC0020C69E /* ShotPageTabBarController.swift */,
 				805B322A1E2030AC0020C69E /* ShotRootController.swift */,
 				805B322B1E2030AC0020C69E /* SignupViewController.swift */,
@@ -258,7 +255,6 @@
 				805B32381E2030AC0020C69E /* GroupsTableViewController.swift in Sources */,
 				805B32391E2030AC0020C69E /* FriendsTableViewController.swift in Sources */,
 				80C857331ED697C70011DA34 /* PostsViewController.swift in Sources */,
-				80DFEA231E202DE400F7B9F3 /* ViewController.swift in Sources */,
 				805B323C1E2030AC0020C69E /* Extensions.swift in Sources */,
 				805B32341E2030AC0020C69E /* ShotRootController.swift in Sources */,
 				80C857311ED135050011DA34 /* FriendsTableViewController_Backup.swift in Sources */,

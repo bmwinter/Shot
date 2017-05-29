@@ -16,8 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var window: UIWindow?
     let baseURL = "https://www.techfiapps.com/api"
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
-    {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
         window = UIWindow(frame: Screen.bounds)
         
         //enable push notifications on iOS 9 & 10
@@ -50,6 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 
     class func getAppDelegate() -> AppDelegate {
+        
         return UIApplication.shared.delegate as! AppDelegate
     }
     
@@ -67,7 +68,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             "You have received a new image!", preferredStyle: UIAlertControllerStyle.alert)
         let cancelAction = UIAlertAction(title: "Okay", style: .cancel)
         alertController.addAction(cancelAction)
-        
         self.window!.rootViewController?.present(alertController, animated: true, completion: nil)
         
         let localNotification:UILocalNotification = UILocalNotification()
@@ -77,4 +77,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UIApplication.shared.scheduleLocalNotification(localNotification)
     }
 }
-

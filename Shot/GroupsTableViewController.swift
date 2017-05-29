@@ -10,12 +10,10 @@ import Foundation
 import Material
 
 class GroupsTableViewController: UITableViewController {
-    
-    // friends: [[name, phone_number, active]
+
     var groups = [String]()
-    var friends = [[[String]]]()
+    var friends = [[[String]]]() // // friends: [section, section] section -> [[name], [phone_number], [active]]
     var collapsed = [Bool]()
-    
     var tField: UITextField!
     
     override func viewDidLoad() {
@@ -42,7 +40,6 @@ class GroupsTableViewController: UITableViewController {
         for g in groups {
             collapsed.append(false)
         }
-        // end groups
         
         // friends
         var filePath : String {
@@ -51,14 +48,9 @@ class GroupsTableViewController: UITableViewController {
             return url!.appendingPathComponent("friends").path
         }
         if let array = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) {
-            
             let storedContacts = array as! [[[String]]]
             self.friends = storedContacts
-            
         }
-        // end friends
-        
-        
     }
     
     func saveGroupsList(groups: [String], filePath: String) {
@@ -83,9 +75,6 @@ class GroupsTableViewController: UITableViewController {
         pageTabBarItem.tintColor = .white
     }
 }
-
-
-
 
 //
 // MARK: - View Controller DataSource and Delegate
@@ -158,7 +147,6 @@ extension GroupsTableViewController {
         header.setCollapsed(collapsed[section])
         header.section = section
         header.delegate = self
-                
         return header
     }
     
@@ -247,7 +235,6 @@ extension GroupsTableViewController {
             } else {
                 // one group left
             }
-            
         }
         alertController.addAction(alertTitle)
         
@@ -257,6 +244,7 @@ extension GroupsTableViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
+    // add group
     func alertAddMessage() {
         let alert = UIAlertController(title: "Enter group name", message: "", preferredStyle: .alert)
         alert.addTextField(configurationHandler: configurationTextField)
@@ -264,8 +252,6 @@ extension GroupsTableViewController {
         alert.addAction(UIAlertAction(title: "Done", style: .default, handler:{ (UIAlertAction) in
             
             let groupTitle = self.tField.text!
-            
-            // add group
             
             // update local values
             var friendList = self.friends[0]
@@ -295,15 +281,11 @@ extension GroupsTableViewController {
             }
             self.saveGroupsList(groups: self.groups, filePath: filePathGroups)
             self.saveFriendsList(friends: self.friends, filePath: filePath)
-            
             self.tableView.reloadData()
-            
         }))
         self.present(alert, animated: true, completion: {
         })
-
     }
-
 }
 
 //
@@ -319,16 +301,11 @@ extension GroupsTableViewController: CollapsibleTableViewHeaderDelegate {
         collapsed[section] = collapse
         header.setCollapsed(collapse)
         
-        
-        
         // Adjust the height of the rows inside the section
         tableView.beginUpdates()
         for i in 0 ..< friends[section][0].count {
             tableView.reloadRows(at: [IndexPath(row: i, section: section)], with: .automatic)
         }
         tableView.endUpdates()
-        
     }
-    
 }
-
