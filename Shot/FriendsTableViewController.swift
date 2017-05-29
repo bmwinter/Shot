@@ -10,7 +10,6 @@ import Foundation
 import Alamofire
 import Material
 import Contacts
-import SwiftSpinner
 import Refresher
 
 class FriendsTableViewController: UITableViewController {

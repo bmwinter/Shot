@@ -25,7 +25,6 @@ class GroupsTableViewController: UITableViewController {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
-        
         // groups
         var filePathGroups : String {
             let manager = FileManager.default
@@ -33,19 +32,15 @@ class GroupsTableViewController: UITableViewController {
             return url!.appendingPathComponent("friendGroups").path
         }
         
-        if let testFriendGroups = NSKeyedUnarchiver.unarchiveObject(withFile: filePathGroups) {
-            
-            self.groups = testFriendGroups as! [String]
-            
-            for g in groups {
-                collapsed.append(false)
-            }
-            
-        } else { // testFriendGroups does not exist, redundant done in contacts
-            
+        guard let testFriendGroups = NSKeyedUnarchiver.unarchiveObject(withFile: filePathGroups) else {
             let groupListDefault = ["Friends"]
             self.saveGroupsList(groups: groupListDefault, filePath: filePathGroups)
             collapsed = [false]
+            return
+        }
+        self.groups = testFriendGroups as! [String]
+        for g in groups {
+            collapsed.append(false)
         }
         // end groups
         
@@ -55,16 +50,11 @@ class GroupsTableViewController: UITableViewController {
             let url = manager.urls(for: .documentDirectory, in: .userDomainMask).first
             return url!.appendingPathComponent("friends").path
         }
-        
         if let array = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) {
             
             let storedContacts = array as! [[[String]]]
-            
             self.friends = storedContacts
-            //self.tableView.reloadData()
             
-        } else {
-            // nothing in storage, first time
         }
         // end friends
         
@@ -132,7 +122,6 @@ extension GroupsTableViewController {
             cell.textLabel?.textColor = UIColor.black
             cell.textLabel?.textAlignment = .center
             cell.accessoryView = nil
-            
         }
         // normal cell
         else {
@@ -151,9 +140,7 @@ extension GroupsTableViewController {
                 imageView.image = UIImage(named: "bullet_unmarked.png")
                 cell.accessoryView = imageView
             }
-            
         }
-        
         return cell
     }
     
@@ -162,15 +149,13 @@ extension GroupsTableViewController {
         return collapsed[(indexPath as NSIndexPath).section] ? 0 : 44.0
     }
     
-    // Header
+    // header
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as? CollapsibleTableViewHeader ?? CollapsibleTableViewHeader(reuseIdentifier: "header")
         
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header") as? CollapsibleTableViewHeader ?? CollapsibleTableViewHeader(reuseIdentifier: "header")
         header.titleLabel.text = groups[section]
         header.arrowLabel.text = ">"
-        
         header.setCollapsed(collapsed[section])
-        
         header.section = section
         header.delegate = self
                 
@@ -211,26 +196,17 @@ extension GroupsTableViewController {
             if let array = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) {
                 
                 var storedContacts = array as! [[[String]]]
-                
                 if (activeContact == "false") {
                     storedContacts[(indexPath as NSIndexPath).section][2][(indexPath as NSIndexPath).row] = "true"
-
                 } else {
                     storedContacts[(indexPath as NSIndexPath).section][2][(indexPath as NSIndexPath).row] = "false"
                 }
-                
                 self.friends = storedContacts
                 self.saveFriendsList(friends: storedContacts, filePath: filePath)
                 self.tableView.reloadData()
-                
             }
-            
         }
-        
-        
-        
     }
-    
     
     func configurationTextField(textField: UITextField!)
     {
@@ -283,7 +259,6 @@ extension GroupsTableViewController {
     
     func alertAddMessage() {
         let alert = UIAlertController(title: "Enter group name", message: "", preferredStyle: .alert)
-        
         alert.addTextField(configurationHandler: configurationTextField)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler:handleCancel))
         alert.addAction(UIAlertAction(title: "Done", style: .default, handler:{ (UIAlertAction) in

@@ -11,7 +11,6 @@
 		805B32331E2030AC0020C69E /* ShotPageTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805B32291E2030AC0020C69E /* ShotPageTabBarController.swift */; };
 		805B32341E2030AC0020C69E /* ShotRootController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805B322A1E2030AC0020C69E /* ShotRootController.swift */; };
 		805B32351E2030AC0020C69E /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805B322B1E2030AC0020C69E /* SignupViewController.swift */; };
-		805B32371E2030AC0020C69E /* PostsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805B322D1E2030AC0020C69E /* PostsViewController.swift */; };
 		805B32381E2030AC0020C69E /* GroupsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805B322E1E2030AC0020C69E /* GroupsTableViewController.swift */; };
 		805B32391E2030AC0020C69E /* FriendsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805B322F1E2030AC0020C69E /* FriendsTableViewController.swift */; };
 		805B323A1E2030AC0020C69E /* CollapsibleTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805B32301E2030AC0020C69E /* CollapsibleTableViewHeader.swift */; };
@@ -19,7 +18,7 @@
 		805B323C1E2030AC0020C69E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805B32321E2030AC0020C69E /* Extensions.swift */; };
 		80C8572F1ED102E90011DA34 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80C8572E1ED102E90011DA34 /* UserNotifications.framework */; };
 		80C857311ED135050011DA34 /* FriendsTableViewController_Backup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C857301ED135050011DA34 /* FriendsTableViewController_Backup.swift */; };
-		80C857331ED697C70011DA34 /* PostsViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C857321ED697C70011DA34 /* PostsViewController2.swift */; };
+		80C857331ED697C70011DA34 /* PostsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C857321ED697C70011DA34 /* PostsViewController.swift */; };
 		80DFEA211E202DE400F7B9F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DFEA201E202DE400F7B9F3 /* AppDelegate.swift */; };
 		80DFEA231E202DE400F7B9F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DFEA221E202DE400F7B9F3 /* ViewController.swift */; };
 		80DFEA261E202DE400F7B9F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80DFEA241E202DE400F7B9F3 /* Main.storyboard */; };
@@ -34,7 +33,6 @@
 		805B32291E2030AC0020C69E /* ShotPageTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShotPageTabBarController.swift; sourceTree = "<group>"; };
 		805B322A1E2030AC0020C69E /* ShotRootController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShotRootController.swift; sourceTree = "<group>"; };
 		805B322B1E2030AC0020C69E /* SignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
-		805B322D1E2030AC0020C69E /* PostsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostsViewController.swift; sourceTree = "<group>"; };
 		805B322E1E2030AC0020C69E /* GroupsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupsTableViewController.swift; sourceTree = "<group>"; };
 		805B322F1E2030AC0020C69E /* FriendsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendsTableViewController.swift; sourceTree = "<group>"; };
 		805B32301E2030AC0020C69E /* CollapsibleTableViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollapsibleTableViewHeader.swift; sourceTree = "<group>"; };
@@ -42,7 +40,7 @@
 		805B32321E2030AC0020C69E /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		80C8572E1ED102E90011DA34 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		80C857301ED135050011DA34 /* FriendsTableViewController_Backup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendsTableViewController_Backup.swift; sourceTree = "<group>"; };
-		80C857321ED697C70011DA34 /* PostsViewController2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostsViewController2.swift; sourceTree = "<group>"; };
+		80C857321ED697C70011DA34 /* PostsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostsViewController.swift; sourceTree = "<group>"; };
 		80DFEA1D1E202DE400F7B9F3 /* Shot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80DFEA201E202DE400F7B9F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		80DFEA221E202DE400F7B9F3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -102,8 +100,7 @@
 				805B32291E2030AC0020C69E /* ShotPageTabBarController.swift */,
 				805B322A1E2030AC0020C69E /* ShotRootController.swift */,
 				805B322B1E2030AC0020C69E /* SignupViewController.swift */,
-				805B322D1E2030AC0020C69E /* PostsViewController.swift */,
-				80C857321ED697C70011DA34 /* PostsViewController2.swift */,
+				80C857321ED697C70011DA34 /* PostsViewController.swift */,
 				805B322E1E2030AC0020C69E /* GroupsTableViewController.swift */,
 				805B322F1E2030AC0020C69E /* FriendsTableViewController.swift */,
 				80C857301ED135050011DA34 /* FriendsTableViewController_Backup.swift */,
@@ -258,10 +255,9 @@
 			files = (
 				805B323B1E2030AC0020C69E /* BeatAnimator.swift in Sources */,
 				805B323A1E2030AC0020C69E /* CollapsibleTableViewHeader.swift in Sources */,
-				805B32371E2030AC0020C69E /* PostsViewController.swift in Sources */,
 				805B32381E2030AC0020C69E /* GroupsTableViewController.swift in Sources */,
 				805B32391E2030AC0020C69E /* FriendsTableViewController.swift in Sources */,
-				80C857331ED697C70011DA34 /* PostsViewController2.swift in Sources */,
+				80C857331ED697C70011DA34 /* PostsViewController.swift in Sources */,
 				80DFEA231E202DE400F7B9F3 /* ViewController.swift in Sources */,
 				805B323C1E2030AC0020C69E /* Extensions.swift in Sources */,
 				805B32341E2030AC0020C69E /* ShotRootController.swift in Sources */,
