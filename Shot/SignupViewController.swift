@@ -86,7 +86,6 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         firstNameField.returnKeyType = .next
         firstNameField.tag = 0
         firstNameField.delegate = self
-        firstNameField.becomeFirstResponder()
         view.addSubview(firstNameField)
     }
     
@@ -263,7 +262,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     func displayApplication() {
         
         let vc = ShotPageTabBarController(viewControllers: [PostsViewController(), GroupsTableViewController(), FriendsTableViewController()], selectedIndex: 2)
-        self.present(vc, animated: true, completion: nil)
+        present(vc, animated: true, completion: nil)
     }
     
     func alertError(error: String) {
@@ -276,7 +275,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     
     func smsCodeSentAlert(phone_number: String) {
         
-        let message = "Text message has been sent to \(phone_number)"
+        let message = "Verification code has been sent."
         let alertController = UIAlertController(title: "Message", message: message, preferredStyle: UIAlertControllerStyle.alert)
         alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
         self.present(alertController, animated: true, completion: nil)

@@ -22,6 +22,10 @@ class ShotPageTabBarController: PageTabBarController {
         view.backgroundColor = .white
     }
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
     private func preparePageTabBar() {
         pageTabBar.dividerColor = Color.grey.lighten3
         pageTabBar.dividerAlignment = .bottom

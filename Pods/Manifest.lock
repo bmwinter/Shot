@@ -1,11 +1,11 @@
 PODS:
-  - Alamofire (4.2.0)
-  - Kingfisher (3.2.3)
-  - Material (2.4.1):
-    - Material/Core (= 2.4.1)
-  - Material/Core (2.4.1)
+  - Alamofire (4.4.0)
+  - Kingfisher (3.9.1)
+  - Material (2.6.3):
+    - Material/Core (= 2.6.3)
+  - Material/Core (2.6.3)
   - Refresher (0.6.1)
-  - SwiftSpinner (1.1.0)
+  - SwiftSpinner (1.2.1)
   - UIDropDown (1.1.1)
 
 DEPENDENCIES:
@@ -17,11 +17,11 @@ DEPENDENCIES:
   - UIDropDown (~> 1.1)
 
 SPEC CHECKSUMS:
-  Alamofire: aa2e09d871c9160ac53c90e83c68064a94e3dfbe
-  Kingfisher: 0e789b4069e20da071d6eec59a9cfb4cee67a1cb
-  Material: bdf4386e3600537077c2667764292f8dd581e541
+  Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  Kingfisher: 6729a0baaa458245bfb8cd5a1296c71c10d6eb6c
+  Material: af607a7ec0e9978ef85cf189a3d8ceeeb650400f
   Refresher: 7c6f09ef3428aa921cb477611fb26bf29a9e5492
-  SwiftSpinner: c03815614599b91eea46594bd52ba742849d0414
+  SwiftSpinner: 62a28bbb4035f252a1e91b0e17fc40bdbbfa0aab
   UIDropDown: 22e6e3e22d419884c8f21d95ea9be36aac905ed4
 
 PODFILE CHECKSUM: e814e2d889cfe37c48418a1f9f6c57506da50dd4

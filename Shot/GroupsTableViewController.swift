@@ -12,7 +12,7 @@ import Material
 class GroupsTableViewController: UITableViewController {
 
     var groups = [String]()
-    var friends = [[[String]]]() // // friends: [section, section] section -> [[name], [phone_number], [active]]
+    var friends = [[[String]]]() // friends: [section, section] section -> [[name], [phone_number], [active]]
     var collapsed = [Bool]()
     var tField: UITextField!
     
@@ -29,14 +29,13 @@ class GroupsTableViewController: UITableViewController {
             let url = manager.urls(for: .documentDirectory, in: .userDomainMask).first
             return url!.appendingPathComponent("friendGroups").path
         }
-        
-        guard let testFriendGroups = NSKeyedUnarchiver.unarchiveObject(withFile: filePathGroups) else {
+        guard let friendGroups = NSKeyedUnarchiver.unarchiveObject(withFile: filePathGroups) else {
             let groupListDefault = ["Friends"]
             self.saveGroupsList(groups: groupListDefault, filePath: filePathGroups)
             collapsed = [false]
             return
         }
-        self.groups = testFriendGroups as! [String]
+        self.groups = friendGroups as! [String]
         for g in groups {
             collapsed.append(false)
         }
@@ -72,7 +71,7 @@ class GroupsTableViewController: UITableViewController {
     
     func preparePageTabBarItem() {
         pageTabBarItem.title = "GROUPS"
-        pageTabBarItem.tintColor = .white
+        pageTabBarItem.titleColor = .white
     }
 }
 
@@ -252,7 +251,7 @@ extension GroupsTableViewController {
         alert.addAction(UIAlertAction(title: "Done", style: .default, handler:{ (UIAlertAction) in
             
             let groupTitle = self.tField.text!
-            
+            // friends: [section, section] section -> [[name], [phone_number], [active]]
             // update local values
             var friendList = self.friends[0]
             var activeContacts = [String]()

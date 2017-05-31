@@ -161,8 +161,6 @@ class FriendsTableViewController: UITableViewController {
                 }
                 // add user to NSKeyedArchive
                 for user in validUsers {
-                    print(user.key)
-                    print(user.value)
                     self.updateContacts(phoneNumber: user.value as! String, name: user.key)
                 }
             }
@@ -196,7 +194,6 @@ class FriendsTableViewController: UITableViewController {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             } catch {
-                print(error.localizedDescription)
             }
         }
         return nil
@@ -255,7 +252,7 @@ class FriendsTableViewController: UITableViewController {
     
     func preparePageTabBarItem() {
         pageTabBarItem.title = "FRIENDS"
-        pageTabBarItem.tintColor = .white
+        pageTabBarItem.titleColor = .white
     }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 - 2016, Daniel Dahan and CosmicMind, Inc. <http://cosmicmind.io>.
+ * Copyright (C) 2015 - 2017, Daniel Dahan and CosmicMind, Inc. <http://cosmicmind.com>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,9 +35,9 @@ public protocol CollectionViewDelegate: UICollectionViewDelegate {}
 public protocol CollectionViewDataSource: UICollectionViewDataSource {
     /**
      Retrieves the data source items for the collectionView.
-     - Returns: An Array of CollectionViewDataSourceItem objects.
+     - Returns: An Array of DataSourceItem objects.
      */
-    var dataSourceItems: [CollectionViewDataSourceItem] { get }
+    var dataSourceItems: [DataSourceItem] { get }
 }
 
 extension UIViewController {
@@ -62,11 +62,16 @@ open class CollectionViewController: UIViewController {
     /// A reference to a Reminder.
     open let collectionView = CollectionView()
     
-    open var dataSourceItems = [CollectionViewDataSourceItem]()
+    open var dataSourceItems = [DataSourceItem]()
     
     open override func viewDidLoad() {
         super.viewDidLoad()
         prepare()
+    }
+    
+    open override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        collectionView.frame = view.bounds
     }
     
     /**
@@ -78,7 +83,7 @@ open class CollectionViewController: UIViewController {
      */
     open func prepare() {
         view.clipsToBounds = true
-        view.backgroundColor = Color.white
+        view.backgroundColor = .white
         view.contentScaleFactor = Screen.scale
         prepareCollectionView()
     }
@@ -89,7 +94,7 @@ extension CollectionViewController {
     fileprivate func prepareCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
-        view.layout(collectionView).edges()
+        view.addSubview(collectionView)
     }
 }
 

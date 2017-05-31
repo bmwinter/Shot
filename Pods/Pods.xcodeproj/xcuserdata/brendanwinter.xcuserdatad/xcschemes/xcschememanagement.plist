@@ -14,12 +14,12 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Material-io.cosmicmind.material.fonts.xcscheme</key>
+		<key>Material-com.cosmicmind.material.fonts.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Material-io.cosmicmind.material.icons.xcscheme</key>
+		<key>Material-com.cosmicmind.material.icons.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -52,12 +52,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>4017B0B8815FF792314F1A877AAA2243</key>
+		<key>39AA3FC7447AC6B6A131668CFF9C01CD</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4A2F765C0008E6907A56FA900AB21F77</key>
+		<key>3A5897FCD2621886E495618AB901B1EF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -82,7 +82,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C10A3D56D9722EC76584E3911946028F</key>
+		<key>8D511562A8961C5B7A5DD87BAE2374F2</key>
 		<dict>
 			<key>primary</key>
 			<true/>

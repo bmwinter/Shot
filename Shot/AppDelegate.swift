@@ -62,7 +62,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     private func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-        print(userInfo)
         
         let alertController = UIAlertController(title: "Message", message:
             "You have received a new image!", preferredStyle: UIAlertControllerStyle.alert)
