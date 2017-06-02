@@ -41,6 +41,12 @@ class ShotPageTabBarController: PageTabBarController {
 extension ShotPageTabBarController
 : PageTabBarControllerDelegate {
     func pageTabBarController(pageTabBarController: PageTabBarController, didTransitionTo viewController: UIViewController) {
-        //reset groups with global variable
+        //v1.1 reload groups with global variable
+        
+        // enable view reset if switching from another view controller
+        if (viewController is PostsViewController == false) {
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.isPostViewControllerActive = false
+        }
     }
 }

@@ -8,7 +8,6 @@ target 'Shot' do
   # Pods for Card
 pod 'Material', '~> 2.0'
 pod 'Alamofire', '~> 4.0'
-pod 'SwiftSpinner', '~> 1.1'
 pod 'Kingfisher', '~> 3.2'
 pod 'UIDropDown', '~> 1.1'
 pod 'Refresher', '~> 0.6'

@@ -10,7 +10,6 @@ import Foundation
 import AVFoundation
 import Alamofire
 import Material
-import SwiftSpinner
 import Kingfisher
 import UIDropDown
 
@@ -42,10 +41,11 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
         view.backgroundColor = .black
         
         // retrieve and display posts
-        if (!viewAppear) {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        if (!appDelegate.isPostViewControllerActive) { // enables reloading when switching back from another view controller
             showActivityIndicator()
             clearPosts() // removes posts for returning to view & calls retrieve posts
-            viewAppear = true
+            appDelegate.isPostViewControllerActive = true
         }
     }
     
@@ -326,8 +326,6 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
             subview.removeFromSuperview()
         }
         
-        self.dismiss(animated: true, completion: enableViewReload)
-        
         // preview post
         let image = info[UIImagePickerControllerOriginalImage] as? UIImage
         if (image != nil) {
@@ -347,6 +345,7 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
             // send to post members or cancel post
             preparePostButtons()
         }
+        self.dismiss(animated: true, completion: nil)
     }
     
     func preparePostButtons() {
@@ -393,7 +392,7 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
     
     func post() {
         
-        //showActivityIndicator()
+        showActivityIndicator()
         if (self.selectedGroupIndex != -1) {
             let prefs = UserDefaults.standard
             let token = prefs.string(forKey: "token")
@@ -420,7 +419,7 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
             }
             if (members.count == 0) {
                 self.alertError(error: "No members in group")
-                //hideActivityIndicator()
+                self.hideActivityIndicator()
                 return
             } else {
                 
@@ -454,19 +453,19 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
                                         if (response.result.value != nil) {
                                             self.alertPost()
                                         }
-                                        //self.hideActivityIndicator()
+                                        self.hideActivityIndicator()
                                     }
                                 }
                             }
                         case .failure(_):
                             self.alertError(error: "Cannot send post.")
-                            //self.hideActivityIndicator()
+                            self.hideActivityIndicator()
                         }
                 })
             }
         } else {
             self.alertError(error: "Please select a group")
-            //hideActivityIndicator()
+            hideActivityIndicator()
         }
     }
     
@@ -560,18 +559,21 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
         container.frame = view.frame
         container.center = view.center
         container.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3)
+        view.addSubview(container)
         
         activityIndicator.frame = CGRect(x: 0.0, y: 0.0, width: 40.0, height: 40.0);
         activityIndicator.center = view.center
         activityIndicator.hidesWhenStopped = true
         activityIndicator.activityIndicatorViewStyle =
             UIActivityIndicatorViewStyle.whiteLarge
-        view.addSubview(activityIndicator)
+        container.addSubview(activityIndicator)
         activityIndicator.startAnimating()
     }
     
+    
     func hideActivityIndicator() {
         activityIndicator.stopAnimating()
+        container.removeFromSuperview()
     }
     
     required init?(coder aDecoder: NSCoder) {

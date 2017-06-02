@@ -155,11 +155,19 @@ class FriendsTableViewController: UITableViewController {
                     return url!.appendingPathComponent("friendGroups").path
                 }
                 // populate friends for first time
-                if (NSKeyedUnarchiver.unarchiveObject(withFile: filePathGroups) == nil) {
+                //if (NSKeyedUnarchiver.unarchiveObject(withFile: filePathGroups) == nil) {
                     let groupListDefault = ["Friends"]
                     self.saveGroupsList(groups: groupListDefault, filePath: filePathGroups)
+                //}
+                // reset friends storage to remove contacts
+                var friendsSection = [[[String]]]()
+                var filePath : String {
+                    let manager = FileManager.default
+                    let url = manager.urls(for: .documentDirectory, in: .userDomainMask).first
+                    return url!.appendingPathComponent("friends").path
                 }
-                // add user to NSKeyedArchive
+                self.saveFriendsList(friends: friendsSection, filePath: filePath)
+                // add users to NSKeyedArchive
                 for user in validUsers {
                     self.updateContacts(phoneNumber: user.value as! String, name: user.key)
                 }
@@ -201,16 +209,16 @@ class FriendsTableViewController: UITableViewController {
 
     func updateContacts(phoneNumber: String, name: String) {
         
-        self.names.append(name)
-        self.phoneNumbers.append(phoneNumber)
-        self.activeContacts.append("false")
+        names.append(name)
+        phoneNumbers.append(phoneNumber)
+        activeContacts.append("false")
         var friendsSection = [[[String]]]()
         var friendSection = [[String]]()
-        friendSection.append(self.names)
-        friendSection.append(self.phoneNumbers)
-        friendSection.append(self.activeContacts)
+        friendSection.append(names)
+        friendSection.append(phoneNumbers)
+        friendSection.append(activeContacts)
         friendsSection.append(friendSection)
-        self.friends = friendsSection
+        friends = friendsSection
         
         var filePath : String {
             let manager = FileManager.default

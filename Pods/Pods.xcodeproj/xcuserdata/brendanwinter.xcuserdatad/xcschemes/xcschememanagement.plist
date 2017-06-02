@@ -39,11 +39,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>SwiftSpinner.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>UIDropDown.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -62,21 +57,6 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>524750B3EACAB83D0E7D8BB103314508</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>709EA7B8AF4B4E6FFB8409D77282D8A8</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>83129151C114D5A43D8CC1168372B611</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>88E9EC28B8B46C3631E6B242B50F4442</key>
 		<dict>
 			<key>primary</key>
@@ -87,12 +67,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>A31D52D05F5152D6090E2D9A7ED34E43</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A9C79DC526A0ADF3D28F6E8FA619C402</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>C4944FEC314D1A66588651D006273ADE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F1DB79475D8F6E3E16CAAF347EB45A5E</key>
+		<key>CB03559D7235ED5F40BD64EAF60FB70A</key>
 		<dict>
 			<key>primary</key>
 			<true/>

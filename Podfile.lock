@@ -5,7 +5,6 @@ PODS:
     - Material/Core (= 2.6.3)
   - Material/Core (2.6.3)
   - Refresher (0.6.1)
-  - SwiftSpinner (1.2.1)
   - UIDropDown (1.1.1)
 
 DEPENDENCIES:
@@ -13,7 +12,6 @@ DEPENDENCIES:
   - Kingfisher (~> 3.2)
   - Material (~> 2.0)
   - Refresher (~> 0.6)
-  - SwiftSpinner (~> 1.1)
   - UIDropDown (~> 1.1)
 
 SPEC CHECKSUMS:
@@ -21,9 +19,8 @@ SPEC CHECKSUMS:
   Kingfisher: 6729a0baaa458245bfb8cd5a1296c71c10d6eb6c
   Material: af607a7ec0e9978ef85cf189a3d8ceeeb650400f
   Refresher: 7c6f09ef3428aa921cb477611fb26bf29a9e5492
-  SwiftSpinner: 62a28bbb4035f252a1e91b0e17fc40bdbbfa0aab
   UIDropDown: 22e6e3e22d419884c8f21d95ea9be36aac905ed4
 
-PODFILE CHECKSUM: e814e2d889cfe37c48418a1f9f6c57506da50dd4
+PODFILE CHECKSUM: c5f2b7ec9660639ed73cd5fed2c219316514cdec
 
 COCOAPODS: 1.1.1

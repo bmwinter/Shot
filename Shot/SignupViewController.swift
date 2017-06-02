@@ -9,7 +9,6 @@
 import UIKit
 import Material
 import Alamofire
-import SwiftSpinner
 
 class SignupViewController: UIViewController, UITextFieldDelegate {
     
