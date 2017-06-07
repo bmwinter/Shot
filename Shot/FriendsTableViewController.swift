@@ -274,7 +274,11 @@ extension FriendsTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return friends[0][0].count
+        if !friends.isEmpty {
+            return friends[0][0].count
+        } else {
+            return 0
+        }
     }
     
     // Cell

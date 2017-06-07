@@ -34,9 +34,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // set token for registration
         let prefs = UserDefaults.standard
         prefs.setValue("", forKey: "token")
-        
+                
         // open signup, login or posts page
-        if let loggedIn = prefs.string(forKey: "loggedIn"){ // not signed up
+        if let loggedIn = prefs.string(forKey: "loggedIn") { // not signed up
             if (loggedIn == "true") {
                 // open image stack
                 window!.rootViewController = ShotPageTabBarController(viewControllers: [PostsViewController(), GroupsTableViewController(), FriendsTableViewController()], selectedIndex: 0)

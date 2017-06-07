@@ -85,7 +85,11 @@ extension GroupsTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return friends[section][0].count + 2
+        if !friends.isEmpty {
+            return friends[section][0].count + 2
+        } else {
+            return 0
+        }
     }
     
     // Cell
@@ -301,10 +305,13 @@ extension GroupsTableViewController: CollapsibleTableViewHeaderDelegate {
         header.setCollapsed(collapse)
         
         // Adjust the height of the rows inside the section
-        tableView.beginUpdates()
-        for i in 0 ..< friends[section][0].count {
-            tableView.reloadRows(at: [IndexPath(row: i, section: section)], with: .automatic)
+        if !friends.isEmpty {
+            tableView.beginUpdates()
+            for i in 0 ..< friends[section][0].count {
+                tableView.reloadRows(at: [IndexPath(row: i, section: section)], with: .automatic)
+            }
+            tableView.endUpdates()
         }
-        tableView.endUpdates()
+        
     }
 }

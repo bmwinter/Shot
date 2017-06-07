@@ -167,13 +167,20 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     func sendSMSCode() {
         
         let phoneNumberText = phoneNumberField.text!
-        if (firstNameField.text == "") {
+        // check demo account & bypass registering
+        if (phoneNumberText == "+19999999999") {
+            let prefs = UserDefaults.standard
+            prefs.setValue("1234567890", forKey: "token")
+            prefs.setValue("+19999999999", forKey: "phone_number")
+            self.displayApplication() // display app
+        }
+        else if (firstNameField.text == "") {
             alertError(error: "Must enter first name.")
         }
         else if (lastNameField.text == "") {
             alertError(error: "Must enter last name.")
         }
-        else if (phoneNumberField.text == "" || phoneNumberField.text == "+1") {
+        else if (phoneNumberField.text == "" || phoneNumberText == "+1") {
             alertError(error: "Must enter phone number.")
         }
         else if (!validate(value: phoneNumberText)) {
@@ -233,15 +240,15 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
             let requestId = JSON.object(forKey: "request_id")!
             let prefs = UserDefaults.standard
             prefs.setValue(phoneNumberText, forKey: "phone_number")
-            
+                        
             // device token
-            let deviceToken = prefs.string(forKey: "token")!
+            let token = prefs.string(forKey: "token")!
             let full_name = firstNameText + " " + lastNameText
             let parameters_register = [
                 "name": full_name,
                 "phone_number": phoneNumberText,
-                "token": requestId,
-                "device_token": deviceToken
+                "request_id": requestId,
+                "token": token
             ]
             
             // register user

@@ -21,7 +21,6 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
     var currentImageIndex = 0
     let tapRecognizer = UITapGestureRecognizer()
     var noPostsDisplaying = false
-    var viewAppear = false
     var groups = [String]()
     var selectedGroup = ""
     var selectedGroupIndex = -1
@@ -43,6 +42,7 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
         // retrieve and display posts
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         if (!appDelegate.isPostViewControllerActive) { // enables reloading when switching back from another view controller
+            noPostsDisplaying = false
             showActivityIndicator()
             clearPosts() // removes posts for returning to view & calls retrieve posts
             appDelegate.isPostViewControllerActive = true
@@ -52,9 +52,10 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
     func retrievePosts() {
         
         let prefs = UserDefaults.standard
-        let token = prefs.string(forKey: "token")!
+        let phone_number = prefs.string(forKey: "phone_number")!
+                    
         let parameters: [String: String] = [
-            "token": token
+            "phone_number": phone_number
         ]
         Alamofire.request(AppDelegate.getAppDelegate().baseURL + "/posts/post", method: .post, parameters: parameters, encoding: JSONEncoding.default).responseJSON { response in
             
@@ -79,12 +80,14 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
                     self.imageURLS.append(media_url)
                 }
             }
-            
             if self.imageURLS.count > 0 {
                 if self.scrollView != nil {
                     OperationQueue.main.addOperation {
                         self.scrollView.stopPullToRefresh()
                     }
+                }
+                if self.scrollView != nil {
+                    self.scrollView.removeFromSuperview()
                 }
                 self.loadImages()
                 UIApplication.shared.applicationIconBadgeNumber = 0
@@ -154,23 +157,22 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
     
             scrollView = UIScrollView(frame: view.bounds)
             scrollView.contentSize = view.bounds.size
+            scrollView.backgroundColor = .white
             scrollView.alwaysBounceVertical = true
             scrollView.addSubview(self.label)
             scrollView.addSubview(newPostButton)
             view.addSubview(scrollView)
             
-            noPostsDisplaying = true
-            
             // pull to refresh fetches new images
             let beatAnimator = BeatAnimator(frame: CGRect(x: 0, y: 0, width: 320, height: 80))
             scrollView.addPullToRefreshWithAction({
                 OperationQueue().addOperation {
-                    if (self.checkNotificationSettings()) {
-                        self.retrievePosts()
-                    }
+                    self.retrievePosts()
                 }
             }, withAnimator: beatAnimator)
             hideActivityIndicator()
+            
+            noPostsDisplaying = true
         }
     }
     
@@ -242,26 +244,16 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
     
     func displayCamera() {
         
-        // check for permissions for notifications
-        if (checkNotificationSettings()) {
+        // check for permissions for camera
+        let authStatus: AVAuthorizationStatus = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
+        switch(authStatus) {
             
-            // check for permissions for camera
-            let authStatus: AVAuthorizationStatus = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
-            switch(authStatus) {
-                
-            case .authorized:
-                if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
-                    let imagePicker = UIImagePickerController()
-                    imagePicker.delegate = self
-                    imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
-                    imagePicker.allowsEditing = false
-                    self.present(imagePicker, animated: true, completion: nil)
-                }
-                
-            case .denied:
-                let alertController = UIAlertController(title: "Error", message:
-                    "Please enable Camera permission via Settings.", preferredStyle: UIAlertControllerStyle.alert)
-                alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default,handler: nil))
+        case .authorized:
+            
+            // check for notification permissions
+            let isRegisteredForRemoteNotifications = UIApplication.shared.isRegisteredForRemoteNotifications
+            if !isRegisteredForRemoteNotifications {
+                let alertController = UIAlertController (title: "Notifications", message: "Please enable notifications via Settings", preferredStyle: .alert)
                 let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) -> Void in
                     guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
                         return
@@ -271,51 +263,73 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
                     }
                 }
                 alertController.addAction(settingsAction)
-                self.present(alertController, animated: true, completion: nil)
-                
-            case .restricted:
-                let alertController = UIAlertController(title: "Error", message:
-                    "Please enable Camera permission via Settings.", preferredStyle: UIAlertControllerStyle.alert)
-                alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
-                self.present(alertController, animated: true, completion: nil)
-                
-            case .notDetermined:
-                let mediaType = AVMediaTypeVideo
-                AVCaptureDevice.requestAccess(forMediaType: mediaType) {
-                    (granted) in
-                    if granted == true {
-                        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
-                            let imagePicker = UIImagePickerController()
-                            imagePicker.delegate = self
-                            imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
-                            imagePicker.allowsEditing = false
-                            self.present(imagePicker, animated: true, completion: nil)
-                        }
-                    } else { // Deny selected
-                        let alertController = UIAlertController(title: "Error", message:
-                            "Please enable Camera permission via Settings.", preferredStyle: UIAlertControllerStyle.alert)
-                        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
-                        
-                        let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) -> Void in
-                            guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
-                                return
-                            }
-                            
-                            if UIApplication.shared.canOpenURL(settingsUrl) {
-                                UIApplication.shared.openURL(settingsUrl)
-                            }
-                        }
-                        alertController.addAction(settingsAction)
-                        self.present(alertController, animated: true, completion: nil)
+                let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: { (_) -> Void in
+                    if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
+                        let imagePicker = UIImagePickerController()
+                        imagePicker.delegate = self
+                        imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
+                        imagePicker.allowsEditing = false
+                        self.present(imagePicker, animated: true, completion: nil)
                     }
+                })
+                alertController.addAction(cancelAction)
+                
+                self.present(alertController, animated: true, completion: nil)
+            }
+            
+        case .denied:
+            let alertController = UIAlertController(title: "Error", message:
+                "Please enable Camera permission via Settings.", preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default,handler: nil))
+            let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) -> Void in
+                guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
+                    return
+                }
+                if UIApplication.shared.canOpenURL(settingsUrl) {
+                    UIApplication.shared.openURL(settingsUrl)
+                }
+            }
+            alertController.addAction(settingsAction)
+            self.present(alertController, animated: true, completion: nil)
+            
+        case .restricted:
+            let alertController = UIAlertController(title: "Error", message:
+                "Please enable Camera permission via Settings.", preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
+            self.present(alertController, animated: true, completion: nil)
+            
+            
+        case .notDetermined:
+            let mediaType = AVMediaTypeVideo
+            AVCaptureDevice.requestAccess(forMediaType: mediaType) {
+                (granted) in
+                if granted == true {
+                    if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
+                        let imagePicker = UIImagePickerController()
+                        imagePicker.delegate = self
+                        imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
+                        imagePicker.allowsEditing = false
+                        self.present(imagePicker, animated: true, completion: nil)
+                    }
+                } else { // Deny selected
+                    let alertController = UIAlertController(title: "Error", message:
+                        "Please enable Camera permission via Settings.", preferredStyle: UIAlertControllerStyle.alert)
+                    alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+                    
+                    let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) -> Void in
+                        guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
+                            return
+                        }
+                        
+                        if UIApplication.shared.canOpenURL(settingsUrl) {
+                            UIApplication.shared.openURL(settingsUrl)
+                        }
+                    }
+                    alertController.addAction(settingsAction)
+                    self.present(alertController, animated: true, completion: nil)
                 }
             }
         }
-    }
-    
-    func enableViewReload() {
-        // enable view reload when visiting view controller from another view controller
-        viewAppear = false
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
@@ -395,7 +409,7 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
         showActivityIndicator()
         if (self.selectedGroupIndex != -1) {
             let prefs = UserDefaults.standard
-            let token = prefs.string(forKey: "token")
+            let phone_number = prefs.string(forKey: "phone_number")!
             let image = UIImageJPEGRepresentation(imageViewPost.image!, 0.1)!
             
             // retrieve members
@@ -427,7 +441,7 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
                 Alamofire.upload(
                     multipartFormData: { multipartFormData in
                         multipartFormData.append(image, withName: "file", fileName: "test.jpg", mimeType: "image/jpeg")
-                        multipartFormData.append(token!.data(using: String.Encoding.utf8)!, withName: "token") },
+                        multipartFormData.append(phone_number.data(using: String.Encoding.utf8)!, withName: "token") },
                     to: AppDelegate.getAppDelegate().baseURL + "/post",
                     encodingCompletion: { encodingResult in
                         
@@ -523,35 +537,10 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
             "Post sent individually to everyone in selected group.", preferredStyle: UIAlertControllerStyle.alert)
         let cancelAction = UIAlertAction(title: "Dismiss", style: .cancel) {
             (action) in
-            if (self.checkNotificationSettings()) {
-                self.clearPosts()
-            }
+            self.clearPosts()
         }
         alertController.addAction(cancelAction)
         self.present(alertController, animated: true, completion: nil)
-    }
-    
-    func checkNotificationSettings() -> Bool {
-        let isRegisteredForRemoteNotifications = UIApplication.shared.isRegisteredForRemoteNotifications
-        if !isRegisteredForRemoteNotifications {
-            let alertController = UIAlertController (title: "Notifications", message: "Please enable notifications via Settings", preferredStyle: .alert)
-            let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) -> Void in
-                guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
-                    return
-                }
-                if UIApplication.shared.canOpenURL(settingsUrl) {
-                    UIApplication.shared.openURL(settingsUrl)
-                }
-            }
-            alertController.addAction(settingsAction)
-            let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
-            alertController.addAction(cancelAction)
-            
-            self.present(alertController, animated: true, completion: nil)
-            return false
-        } else {
-            return true
-        }
     }
     
     func showActivityIndicator() {
