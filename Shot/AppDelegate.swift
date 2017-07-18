@@ -35,15 +35,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let prefs = UserDefaults.standard
         prefs.setValue("", forKey: "token")
                 
-        // open signup, login or posts page
+        // open signup or posts page
         if let loggedIn = prefs.string(forKey: "loggedIn") { // not signed up
             if (loggedIn == "true") {
                 // open image stack
                 window!.rootViewController = ShotPageTabBarController(viewControllers: [PostsViewController(), GroupsTableViewController(), FriendsTableViewController()], selectedIndex: 0)
+            } else {
+                prefs.setValue("false", forKey: "loggedIn")
+                window!.rootViewController = ShotPageTabBarController(viewControllers: [SignupViewController()], selectedIndex: 0)
             }
         } else{ // first time
             prefs.setValue("false", forKey: "loggedIn")
-            window!.rootViewController = SignupViewController()
+            window!.rootViewController = ShotPageTabBarController(viewControllers: [SignupViewController()], selectedIndex: 0)
         }
         window!.makeKeyAndVisible()
         

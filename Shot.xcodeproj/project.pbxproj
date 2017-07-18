@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0BF59439B76222949D66AA07 /* Pods_Shot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F66B77CD62C38E4629FEEDB /* Pods_Shot.framework */; };
+		800E9F181F01E2D100E6DF4F /* TermsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800E9F171F01E2D100E6DF4F /* TermsViewController.swift */; };
+		800E9F1A1F01F0DE00E6DF4F /* terms-of-service.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 800E9F191F01F0DE00E6DF4F /* terms-of-service.pdf */; };
 		805B32331E2030AC0020C69E /* ShotPageTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805B32291E2030AC0020C69E /* ShotPageTabBarController.swift */; };
 		805B32341E2030AC0020C69E /* ShotRootController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805B322A1E2030AC0020C69E /* ShotRootController.swift */; };
 		805B32351E2030AC0020C69E /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805B322B1E2030AC0020C69E /* SignupViewController.swift */; };
@@ -27,6 +29,8 @@
 /* Begin PBXFileReference section */
 		062374ACFC8A9E57EB61BC9E /* Pods-Shot.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shot.release.xcconfig"; path = "Pods/Target Support Files/Pods-Shot/Pods-Shot.release.xcconfig"; sourceTree = "<group>"; };
 		3F66B77CD62C38E4629FEEDB /* Pods_Shot.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shot.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		800E9F171F01E2D100E6DF4F /* TermsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsViewController.swift; sourceTree = "<group>"; };
+		800E9F191F01F0DE00E6DF4F /* terms-of-service.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "terms-of-service.pdf"; sourceTree = "<group>"; };
 		805B32221E202F0E0020C69E /* Shot.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Shot.entitlements; sourceTree = "<group>"; };
 		805B32291E2030AC0020C69E /* ShotPageTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShotPageTabBarController.swift; sourceTree = "<group>"; };
 		805B322A1E2030AC0020C69E /* ShotRootController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShotRootController.swift; sourceTree = "<group>"; };
@@ -95,12 +99,14 @@
 				805B32291E2030AC0020C69E /* ShotPageTabBarController.swift */,
 				805B322A1E2030AC0020C69E /* ShotRootController.swift */,
 				805B322B1E2030AC0020C69E /* SignupViewController.swift */,
+				800E9F171F01E2D100E6DF4F /* TermsViewController.swift */,
 				80C857321ED697C70011DA34 /* PostsViewController.swift */,
 				805B322E1E2030AC0020C69E /* GroupsTableViewController.swift */,
 				805B322F1E2030AC0020C69E /* FriendsTableViewController.swift */,
 				805B32301E2030AC0020C69E /* CollapsibleTableViewHeader.swift */,
 				805B32311E2030AC0020C69E /* BeatAnimator.swift */,
 				805B32321E2030AC0020C69E /* Extensions.swift */,
+				800E9F191F01F0DE00E6DF4F /* terms-of-service.pdf */,
 				80DFEA241E202DE400F7B9F3 /* Main.storyboard */,
 				80DFEA271E202DE500F7B9F3 /* Assets.xcassets */,
 				80DFEA291E202DE500F7B9F3 /* LaunchScreen.storyboard */,
@@ -189,6 +195,7 @@
 				80DFEA2B1E202DE500F7B9F3 /* LaunchScreen.storyboard in Resources */,
 				80DFEA281E202DE500F7B9F3 /* Assets.xcassets in Resources */,
 				80DFEA261E202DE400F7B9F3 /* Main.storyboard in Resources */,
+				800E9F1A1F01F0DE00E6DF4F /* terms-of-service.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,7 +229,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		E1B4F52F9A9C49FBC5815D96 /* [CP] Copy Pods Resources */ = {
@@ -247,6 +254,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				800E9F181F01E2D100E6DF4F /* TermsViewController.swift in Sources */,
 				805B323B1E2030AC0020C69E /* BeatAnimator.swift in Sources */,
 				805B323A1E2030AC0020C69E /* CollapsibleTableViewHeader.swift in Sources */,
 				805B32381E2030AC0020C69E /* GroupsTableViewController.swift in Sources */,

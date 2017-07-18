@@ -20,6 +20,7 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
     var imageURLS = [String]()
     var currentImageIndex = 0
     let tapRecognizer = UITapGestureRecognizer()
+    let longPressRecognizer = UILongPressGestureRecognizer()
     var noPostsDisplaying = false
     var groups = [String]()
     var selectedGroup = ""
@@ -93,6 +94,7 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
                 UIApplication.shared.applicationIconBadgeNumber = 0
                 
             } else {
+                self.noPostsDisplaying = false
                 self.displayNoPosts()
             }
         }
@@ -192,8 +194,12 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
             
             // set tap gesture to top image
             if i == currentImageIndex {
+                // single tap
                 tapRecognizer.addTarget(self, action: #selector(PostsViewController.nextImage))
                 imageView.addGestureRecognizer(tapRecognizer)
+                // long press
+                longPressRecognizer.addTarget(self, action: #selector(PostsViewController.displayActionSheet))
+                imageView.addGestureRecognizer(longPressRecognizer)
                 scrollView = UIScrollView(frame: view.bounds)
                 scrollView.contentSize = view.bounds.size
                 scrollView.alwaysBounceVertical = true
@@ -206,17 +212,45 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
     
     func nextImage() {
         
-        // checks to start new loop through image stack
-        if (currentImageIndex > 0) {
-            currentImageIndex = currentImageIndex - 1
-            loadNextImage()
-        } else {
+        // check first time
+        let prefs = UserDefaults.standard
+        if prefs.string(forKey: "first") != nil { // not signed up
             
-            // reset to beginning of image stack
-            currentImageIndex = self.imageURLS.count - 1
-            displayCameraAlert()
+            // checks to start new loop through image stack
+            if (currentImageIndex > 0) {
+                currentImageIndex = currentImageIndex - 1
+                loadNextImage()
+            } else {
+                
+                // reset to beginning of image stack
+                currentImageIndex = self.imageURLS.count - 1
+                displayCameraAlert()
+            }
+        } else{ // first time
+            prefs.setValue("false", forKey: "first")
+
+            // display instructions for report inappropriate
+            let alertController = UIAlertController(title: "Message", message:
+                "Long Press on any picture to report as inapppropriate.", preferredStyle: UIAlertControllerStyle.alert)
+            let cancelAction = UIAlertAction(title: "Understand", style: .cancel) {
+                (action) in
+                
+                // checks to start new loop through image stack
+                if (self.currentImageIndex > 0) {
+                    self.currentImageIndex = self.currentImageIndex - 1
+                    self.loadNextImage()
+                } else {
+                    
+                    // reset to beginning of image stack
+                    self.currentImageIndex = self.imageURLS.count - 1
+                    self.displayCameraAlert()
+                }
+            }
+            alertController.addAction(cancelAction)
+            self.present(alertController, animated: true, completion: nil)
         }
     }
+    
     
     func loadNextImage() {
         
@@ -267,7 +301,7 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
                     if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
                         let imagePicker = UIImagePickerController()
                         imagePicker.delegate = self
-                        imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
+                        imagePicker.sourceType = .camera
                         imagePicker.allowsEditing = false
                         self.present(imagePicker, animated: true, completion: nil)
                     }
@@ -275,6 +309,14 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
                 alertController.addAction(cancelAction)
                 
                 self.present(alertController, animated: true, completion: nil)
+            } else {
+                if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
+                    let imagePicker = UIImagePickerController()
+                    imagePicker.delegate = self
+                    imagePicker.sourceType = .camera
+                    imagePicker.allowsEditing = false
+                    self.present(imagePicker, animated: true, completion: nil)
+                }
             }
             
         case .denied:
@@ -307,7 +349,7 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
                     if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
                         let imagePicker = UIImagePickerController()
                         imagePicker.delegate = self
-                        imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
+                        imagePicker.sourceType = .camera
                         imagePicker.allowsEditing = false
                         self.present(imagePicker, animated: true, completion: nil)
                     }
@@ -431,7 +473,7 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
                     }
                 }
             }
-            if (members.count == 0) {
+            if members.count == 0 {
                 self.alertError(error: "No members in group")
                 self.hideActivityIndicator()
                 return
@@ -441,7 +483,7 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
                 Alamofire.upload(
                     multipartFormData: { multipartFormData in
                         multipartFormData.append(image, withName: "file", fileName: "test.jpg", mimeType: "image/jpeg")
-                        multipartFormData.append(phone_number.data(using: String.Encoding.utf8)!, withName: "token") },
+                        multipartFormData.append(phone_number.data(using: String.Encoding.utf8)!, withName: "phone_number") },
                     to: AppDelegate.getAppDelegate().baseURL + "/post",
                     encodingCompletion: { encodingResult in
                         
@@ -457,10 +499,16 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
                                         return
                                     }
                                     
+                                    // check suspended or banned user
+                                    guard let media_url = (result as! NSDictionary).object(forKey: "media_url") else {
+                                        self.hideActivityIndicator()
+                                        self.alertError(error: "You have been suspended.")
+                                        return
+                                    }
+                                    
                                     // send image to members
-                                    let media_url = (result as! NSDictionary).object(forKey: "media_url")! as! String
                                     let parameters: [String: String] = [
-                                        "media_url": media_url,
+                                        "media_url": media_url as! String,
                                         "member": member
                                     ]
                                     Alamofire.request(AppDelegate.getAppDelegate().baseURL + "/post/members", method: .post, parameters: parameters, encoding: JSONEncoding.default).responseJSON { response in
@@ -534,7 +582,7 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
     
     func alertPost() {
         let alertController = UIAlertController(title: "Message", message:
-            "Post sent individually to everyone in selected group.", preferredStyle: UIAlertControllerStyle.alert)
+            "Picture sent to each member individually", preferredStyle: UIAlertControllerStyle.alert)
         let cancelAction = UIAlertAction(title: "Dismiss", style: .cancel) {
             (action) in
             self.clearPosts()
@@ -559,6 +607,27 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
         activityIndicator.startAnimating()
     }
     
+    func displayActionSheet() {
+        
+        let alertController = UIAlertController(title: nil, message: "Report any inappropriate images by selecting Report Inappropriate", preferredStyle: .actionSheet)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alertController.addAction(cancelAction)
+        let okayAction = UIAlertAction(title: "Report Inappropriate", style: .default) { action in
+            print("report inappropriate")
+            print()
+            
+            // report inappropriate
+            let media_url = self.imageURLS[self.currentImageIndex] // get from current image
+            let parameters: [String: String] = [
+                "media_url": media_url
+            ]
+            Alamofire.request(AppDelegate.getAppDelegate().baseURL + "/report", method: .post, parameters: parameters, encoding: JSONEncoding.default).responseJSON { response in
+                print("success")
+            }
+        }
+        alertController.addAction(okayAction)
+        self.present(alertController, animated: true)
+    }
     
     func hideActivityIndicator() {
         activityIndicator.stopAnimating()
@@ -578,7 +647,4 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
         pageTabBarItem.title = "POSTS"
         pageTabBarItem.titleColor = .white
     }
-    
-    
-    
 }

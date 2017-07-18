@@ -19,15 +19,17 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>1.3</string>
+	<string>1.9</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>For uploading pictures</string>
+	<string>This app needs to upload pictures</string>
 	<key>NSContactsUsageDescription</key>
-	<string>For syncing active users</string>
+	<string>This app requires uploading contacts for sending and receiving pictures</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>For uploading pictures</string>
+	<string>This app needs to access pictures</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

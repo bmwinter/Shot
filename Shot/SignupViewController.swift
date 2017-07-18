@@ -9,6 +9,7 @@
 import UIKit
 import Material
 import Alamofire
+import WebKit
 
 class SignupViewController: UIViewController, UITextFieldDelegate {
     
@@ -39,17 +40,10 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         
         super.viewDidLoad()
         view.backgroundColor = .white
-        
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
-        label.text = "SIGN-UP"
-        label.textAlignment = NSTextAlignment.center
-        label.textColor = .white
-        label.backgroundColor = darkBlackColor
-        self.view.addSubview(label)
-        
         prepareFirstNameField()
         prepareLastNameField()
         preparePhoneNumberField()
+        prepareTerms()
         
         signupButton = UIButton(type: .system) // let preferred over var here
         signupButton.frame = CGRect(x: constant, y: 6.5 * constant, width: view.width - (2 * constant), height: constant)
@@ -62,6 +56,8 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         signupButton.borderColor = darkBlackColor
         signupButton.borderWidth = 1
         view.addSubview(signupButton)
+        
+        
     }
     
     @objc
@@ -124,6 +120,39 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(phoneNumberField)
     }
     
+    private func prepareTerms() {
+        
+        let label = UILabel(frame: CGRect(x: constant, y: 6 * constant, width: 250, height: 21))
+        label.font = label.font.withSize(10)
+        label.textAlignment = .left
+        label.isUserInteractionEnabled = true
+        let title = NSMutableAttributedString(string: "By signing up, you agree to our Terms of Service.")
+        title.addAttribute(NSUnderlineStyleAttributeName, value: 1, range: NSRange(location: 32, length: 16))
+        label.attributedText = title
+        let termsGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SignupViewController.displayTerms))
+        label.addGestureRecognizer(termsGestureRecognizer)
+        view.addSubview(label)
+    }
+    
+    func displayTerms(recognizer: UITapGestureRecognizer) {
+
+        if let pdfURL = Bundle.main.url(forResource: "terms-of-service", withExtension: "pdf", subdirectory: nil, localization: nil)  {
+            do {
+                let data = try Data(contentsOf: pdfURL)
+                let webView = WKWebView(frame: CGRect(x:20,y:20,width:view.frame.size.width-40, height:view.frame.size.height-40))
+                webView.allowsLinkPreview = true
+                webView.load(data, mimeType: "application/pdf", characterEncodingName:"", baseURL: pdfURL.deletingLastPathComponent())
+                view.addSubview(webView)
+            }
+            catch {
+            }
+        }
+    }
+    
+    func dismissNavigation() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
         // Try to find next responder
@@ -139,6 +168,13 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     
     private func prepareSMSCodeField() {
         
+        // clear Terms of Use
+        let subViews = self.view.subviews
+        for subview in subViews{
+            subview.removeFromSuperview()
+        }
+        
+        // display SMS field
         smsCodeField = TextField(frame: CGRect(x: constant, y: 4 * constant, width: view.width - (2 * constant), height: constant))
         smsCodeField.placeholder = "sms code"
         smsCodeField.keyboardType = UIKeyboardType.numberPad
@@ -172,6 +208,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
             let prefs = UserDefaults.standard
             prefs.setValue("1234567890", forKey: "token")
             prefs.setValue("+19999999999", forKey: "phone_number")
+            prefs.setValue("true", forKey: "loggedIn")
             self.displayApplication() // display app
         }
         else if (firstNameField.text == "") {
@@ -266,7 +303,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     }
     
     func displayApplication() {
-        
+
         let vc = ShotPageTabBarController(viewControllers: [PostsViewController(), GroupsTableViewController(), FriendsTableViewController()], selectedIndex: 2)
         present(vc, animated: true, completion: nil)
     }
@@ -297,14 +334,15 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         }
         return (false)
     }
-
-    func preparePageTabBarItem() {
-        pageTabBarItem.title = "SIGN-UP"
-    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
        
         view.endEditing(true)
         super.touchesBegan(touches, with: event)
+    }
+    
+    func preparePageTabBarItem() {
+        pageTabBarItem.title = "SIGN-UP"
+        pageTabBarItem.titleColor = .white
     }
 }
