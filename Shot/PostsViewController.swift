@@ -232,7 +232,7 @@ class PostsViewController: UIViewController, UIImagePickerControllerDelegate {
             // display instructions for report inappropriate
             let alertController = UIAlertController(title: "Message", message:
                 "Long Press on any picture to report as inapppropriate.", preferredStyle: UIAlertControllerStyle.alert)
-            let cancelAction = UIAlertAction(title: "Understand", style: .cancel) {
+            let cancelAction = UIAlertAction(title: "I Understand.", style: .cancel) {
                 (action) in
                 
                 // checks to start new loop through image stack
