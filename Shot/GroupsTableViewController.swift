@@ -16,9 +16,9 @@ class GroupsTableViewController: UITableViewController {
     var collapsed = [Bool]()
     var tField: UITextField!
     
-    override func viewDidLoad() {
+    override func viewDidAppear(_ animated: Bool) {
  
-        super.viewDidLoad()
+        super.viewDidAppear(animated)
         
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -50,6 +50,7 @@ class GroupsTableViewController: UITableViewController {
             let storedContacts = array as! [[[String]]]
             self.friends = storedContacts
         }
+        tableView.reloadData()
     }
     
     func saveGroupsList(groups: [String], filePath: String) {

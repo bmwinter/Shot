@@ -36,6 +36,7 @@ class FriendsTableViewController: UITableViewController {
             OperationQueue().addOperation {
                 self.askForContactAccess()
                 self.getContacts()
+                self.tableView.reloadData()
             }
         }, withAnimator: beatAnimator)
         
